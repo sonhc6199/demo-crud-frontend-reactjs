@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,600i,700,700i');
+
+$family-serif: 'Open Sans', sans-serif;
+
+$link: hsl(204, 86%, 53%);
+ 
+$font-stack: 1rem 'Open Sans', sans-serif;
+ 
+@mixin margin($margin) {
+    margin: $margin;
+}
+
+@mixin height($height) {
+    height: $height;
+}
+
+@mixin full-height {
+    @include height(100%);
+}
