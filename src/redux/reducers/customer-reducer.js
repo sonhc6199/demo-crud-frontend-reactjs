@@ -4,7 +4,8 @@ import {
   FETCHING_CUSTOMER,
   ADD_CUSTOMER_SUCCESS,
   ADD_CUSTOMER_FAILURE,
-  DELETE_CUSTOMER_SUCCESS
+  DELETE_CUSTOMER_SUCCESS,
+  
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -15,12 +16,14 @@ const initialState = {
 
 const customer = (state = initialState, action) => {
   switch (action.type) {
+
     case FETCHING_CUSTOMER: {
       return {
         ...state,
         loading: true
       };
     }
+
     case FETCH_CUSTOMER_SUCCESS: {
       const pagination = { ...state.paginationCustomer };
       const dataCustomer = action.payload;
@@ -34,9 +37,11 @@ const customer = (state = initialState, action) => {
         paginationCustomer: pagination
       };
     }
+
     case FETCH_CUSTOMER_FAILURE: {
       return state;
     }
+
     case ADD_CUSTOMER_SUCCESS: {
       const dataAdd = action.payload.dataSave;
       let newData = [...state.data];
@@ -49,11 +54,13 @@ const customer = (state = initialState, action) => {
         data: newData
       };
     }
+
     case ADD_CUSTOMER_FAILURE: {
       return {
         ...state
       };
     }
+    
     case DELETE_CUSTOMER_SUCCESS: {
       const data = [...state.data];
       let newData = data.filter(item => item._id !== action.payload);
@@ -63,6 +70,7 @@ const customer = (state = initialState, action) => {
         data: newData
       };
     }
+
     default: {
       return state;
     }

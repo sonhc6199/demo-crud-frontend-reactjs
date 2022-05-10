@@ -19,11 +19,14 @@ const test = (state = initialState, action) => {
       };
     }
     case FETCH_DATA_SUCCESS: {
+     
       const pagination = { ...state.paginationTest };
       // Read total count from server
       // pagination.total = data.totalCount;
+      
       pagination.total = 200;
       pagination.current = action.currentPage;
+      
       return {
         ...state,
         data: action.data.results,

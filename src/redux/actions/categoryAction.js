@@ -2,31 +2,33 @@ import axios from 'axios';
 import api from '../../routes/api';
 import {
     FETCHING_CATEGORY,
-    FETCH_CUSTOMER_FAILURE,
-    ADD_CUSTOMER_SUCCESS,
-    ADD_CUSTOMER_FAILURE,
-    DELETE_CUSTOMER_SUCCESS,
-    DELETE_CUSTOMER_FAILURE,
-    FETCH_CATEGORY_SUCCESS
+    FETCH_CATEGORY_SUCCESS,
+    FETCH_CATEGORY_FAILURE,
+    ADD_CATEGORY_SUCCESS,
+    ADD_CATEGORY_FAILURE,
+    EDIT_CATEGORY_SUCCESS,
+    EDIT_CATEGORY_FAILURE,
+    DELETE_CATEGORY_SUCCESS,
+    DELETE_CATEGORY_FAILURE
+
 } from '../constants/actionTypes';
 import { notification } from 'antd';
 
 export {
     getDataCategory,
-    addCustomer,
-    deleteCustomer
+    addCategory,
+    editCategory,
+    deleteCategory,
 };
 
 // getDataCategory
-function getDataCategory(params = { pageSize: 10, pageCurrent: 1 }) {
+function getDataCategory(params = { page: 1, limit: 10 }) {
     return (dispatch) => {
         dispatch(fetchingData());
         axios.get(api.getDataCategory, {
             params: { ...params }
         })
             .then(resp => {
-                
-                // message.success(resp.data.message);
 
                 notification.success({
                     message: 'Success',
@@ -50,60 +52,95 @@ function getDataCategory(params = { pageSize: 10, pageCurrent: 1 }) {
         };
     }
 
-    function getDataSuccess(payload, pageCurrent) {
+    function getDataSuccess(data, pageCurrent) {
+
         return {
             type: FETCH_CATEGORY_SUCCESS,
-            payload,
+            data,
             pageCurrent
         };
     }
 
     function getDataFailure() {
         return {
-            type: FETCH_CUSTOMER_FAILURE
+            type: FETCH_CATEGORY_FAILURE
         };
     }
 }
 
-// addCustomer
-function addCustomer(params = {}) {
+// addCategory
+function addCategory(params = {}) {
+
     return (dispatch) => {
-        axios.post(api.addCustomer, params)
+        axios.post(api.addCategory, params)
+            .then(resp => {
+
+                notification.success({
+                    message: 'Success',
+                    description:
+                        'Thêm danh mục thành công !',
+                    duration: 2,
+                    style: { width: 350, marginLeft: 35, marginTop: 45 }
+                });
+                dispatch(addCategorySuccess(resp.data));
+            })
+            .catch((err) => {
+                console.error('[ERROR] add category: ', err);
+                dispatch(addCategoryFailure());
+            });
+    };
+    function addCategorySuccess(data) {
+        return {
+            type: ADD_CATEGORY_SUCCESS,
+            data
+        };
+    }
+
+    function addCategoryFailure() {
+        return {
+            type: ADD_CATEGORY_FAILURE
+        };
+    }
+}
+
+// editCategory
+function editCategory(id = {}, params = {}) {
+    return (dispatch) => {
+        axios.put(api.editCategory + `/${id}`, params)
             .then(resp => {
                 notification.success({
                     message: 'Success',
                     description:
-                        'Thêm khách hàng thành công !',
+                        'Sửa mục thành công !',
                     duration: 2,
                     style: { width: 350, marginLeft: 35, marginTop: 45 }
                 });
-                dispatch(addCustomerSuccess(resp.data));
+                dispatch(editCategorySuccess(resp.data));
             })
             .catch((err) => {
-                console.error('[ERROR] add customer: ', err);
-                dispatch(addCustomerFailure());
+                console.error('[ERROR] edit category: ', err);
+                dispatch(editCategoryFailure());
             });
     };
-    function addCustomerSuccess(payload) {
+    function editCategorySuccess(data) {
         return {
-            type: ADD_CUSTOMER_SUCCESS,
-            payload
+            type: EDIT_CATEGORY_SUCCESS,
+            data
         };
     }
 
-    function addCustomerFailure() {
+    function editCategoryFailure() {
         return {
-            type: ADD_CUSTOMER_FAILURE
+            type: EDIT_CATEGORY_FAILURE
         };
     }
 }
 
-function deleteCustomer(id = {}) {
-    console.log('id delete: ', id);
+// deleteCategory
+function deleteCategory(id = {}) {
     return (dispatch) => {
-        axios.delete(api.deleteCustomer, { data: { id: id } })
+        axios.delete(api.deleteCategory + `/${id}`, {})
             .then(resp => {
-                // console.log('addCus', resp);
                 notification.success({
                     message: 'Success',
                     description:
@@ -111,7 +148,7 @@ function deleteCustomer(id = {}) {
                     duration: 2,
                     style: { width: 350, marginLeft: 35, marginTop: 45 }
                 });
-                dispatch(deleteCustomerSuccess(id));
+                dispatch(deleteCategorySuccess(id));
             })
             .catch((err) => {
                 console.error(err);
@@ -122,19 +159,19 @@ function deleteCustomer(id = {}) {
                     duration: 2,
                     style: { width: 350, marginLeft: 35, marginTop: 45 }
                 });
-                dispatch(deleteCustomerFailure());
+                dispatch(deleteCategoryFailure());
             });
     };
-    function deleteCustomerSuccess(payload) {
+    function deleteCategorySuccess(data) {
         return {
-            type: DELETE_CUSTOMER_SUCCESS,
-            payload
+            type: DELETE_CATEGORY_SUCCESS,
+            data
         };
     }
 
-    function deleteCustomerFailure() {
+    function deleteCategoryFailure() {
         return {
-            type: DELETE_CUSTOMER_FAILURE
+            type: DELETE_CATEGORY_FAILURE
         };
     }
 }

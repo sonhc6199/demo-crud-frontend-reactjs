@@ -1,4 +1,4 @@
-const apiBase = "http://localhost:3000/api";
+const apiBase = "http://localhost:4000/api";
 
 module.exports = {
   getDataCustomer: apiBase + "/get-data-customer",
@@ -9,6 +9,6 @@ module.exports = {
   // category
   getDataCategory: apiBase + "/category/get-data",
   addCategory: apiBase + "/category/add",
-  updateCategory: apiBase + "/category/update",
+  editCategory: apiBase + "/category/edit",
   deleteCategory: apiBase + "/category/delete",
 };
