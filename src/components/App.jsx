@@ -39,7 +39,7 @@ class App extends React.Component {
               <Route path="/customer" component={Customer} />
               <Route path="/users" component={User} />
               <Route path="/categories" component={Category} />
-              <Route path="/categories" component={Product} />
+              <Route path="/products" component={Product} />
             </Switch>
           </Content>
         </Layout>

@@ -108,7 +108,6 @@ const Category = ({
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
-    
     console.log("handleTableChange: ", pagination, filters, sorter);
     getDataCategory({
       limit: pagination.pageSize,
@@ -123,6 +122,7 @@ const Category = ({
         if (method == "post") {
           addCategory(values);
         } else {
+          if (recordSeleted.name == values.name) return;
           editCategory(recordSeleted._id, values);
         }
         onClose();

@@ -6,6 +6,7 @@ import Root from "./Root";
 import configureStore from "./redux/store/configure-store";
 import { INITIAL_STATE } from "./common/app-const";
 
+
 // Require globals
 import "antd/dist/antd.min.css";
 // import "./scss/style.scss";

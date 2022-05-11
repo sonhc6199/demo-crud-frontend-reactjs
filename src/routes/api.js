@@ -11,4 +11,9 @@ module.exports = {
   addCategory: apiBase + "/category/add",
   editCategory: apiBase + "/category/edit",
   deleteCategory: apiBase + "/category/delete",
+  // product
+  getDataProduct: apiBase + "/product/get-data",
+  addProduct: apiBase + "/product/add",
+  editProduct: apiBase + "/product/edit",
+  deleteProduct: apiBase + "/product/delete",
 };
