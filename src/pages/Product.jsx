@@ -19,9 +19,9 @@ import {
   getDataProduct,
   addProduct,
   editProduct,
-  deleteProduct
+  deleteProduct,
+  getDataCategory
 } from "../redux/actions/productAction";
-import { getDataCategory } from "../redux/actions/categoryAction";
 import { useState, useEffect } from "react";
 const { Option } = Select;
 const { TextArea } = Input;
@@ -199,7 +199,7 @@ const Product = ({
   };
 
   const handleRemoveRow = (id) => {
-    deleteProduct(id);
+    deleteProduct(id, product.paginationProduct);
   };
 
   const onClose = () => {
@@ -290,7 +290,7 @@ const Product = ({
             <Col>
               <Form.Item label="Hình ảnh">
                 {getFieldDecorator("file", {
-                  initialValue: uploadFile,
+                  initialValue: uploadFile ? uploadFile : null,
                   rules: [
                     (rule, value, callback) => {
                       if (recordSeleted || value) {
@@ -306,6 +306,7 @@ const Product = ({
                     className="avatar-uploader"
                     showUploadList={false}
                     beforeUpload={beforeUpload}
+                    maxCount={1}
                   >
                     <img
                       src={
@@ -453,7 +454,7 @@ const Product = ({
             </Col>
             <Col>
               <Form.Item label="Số lượng">
-                {getFieldDecorator("price", {
+                {getFieldDecorator("amount", {
                   initialValue: recordSeleted ? recordSeleted.amount : 0,
                   rules: [
                     { required: true, message: "Hãy nhập số lượng sản phẩm!" },
@@ -461,7 +462,7 @@ const Product = ({
                       if (value > 0) {
                         return callback();
                       }
-                      callback("Số lượng là một số lớn hơn 100.000!");
+                      callback("Số lượng là một số lớn hơn 0");
                     }
                   ]
                 })(<Input placeholder="Nhập số lượng" />)}
@@ -507,7 +508,7 @@ function mapDispatchToProps(dispatch) {
     getDataCategory: (params) => dispatch(getDataCategory(params)),
     addProduct: (params) => dispatch(addProduct(params)),
     editProduct: (id, params) => dispatch(editProduct(id, params)),
-    deleteProduct: (id) => dispatch(deleteProduct(id))
+    deleteProduct: (id, params) => dispatch(deleteProduct(id, params))
   };
 }
 

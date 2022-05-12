@@ -38,6 +38,8 @@ const Category = ({
 
   const [method, setMethod] = useState("post");
 
+  const [page, setPage] = useState(1);
+
   const columnCategory = [
     {
       title: "STT",
@@ -82,7 +84,6 @@ const Category = ({
   useEffect(() => {
     getDataCategory({ page: 1, limit: 10 });
   }, []);
-  console.log({ category });
   const showDrawer = () => {
     setVisibleDrawer(true);
   };
@@ -98,7 +99,7 @@ const Category = ({
   };
 
   const handleRemoveRow = (id) => {
-    deleteCategory(id);
+    deleteCategory(id, category.paginationCategory);
   };
 
   const onClose = () => {
@@ -202,7 +203,8 @@ function mapDispatchToProps(dispatch) {
     getDataCategory: (params) => dispatch(getDataCategory(params)),
     addCategory: (params) => dispatch(addCategory(params)),
     editCategory: (id, params) => dispatch(editCategory(id, params)),
-    deleteCategory: (id) => dispatch(deleteCategory(id))
+    deleteCategory: (id, currentCategory) =>
+      dispatch(deleteCategory(id, currentCategory))
   };
 }
 

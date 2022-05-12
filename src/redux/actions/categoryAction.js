@@ -85,7 +85,14 @@ function addCategory(params = {}) {
                 dispatch(addCategorySuccess(resp.data));
             })
             .catch((err) => {
-                console.error('[ERROR] add category: ', err);
+                const message = err.response.data;
+                notification.error({
+                    message: 'Failed to add category',
+                    description:
+                        message,
+                    duration: 2,
+                    style: { width: 350, marginLeft: 35, marginTop: 45 }
+                });
                 dispatch(addCategoryFailure());
             });
     };
@@ -118,7 +125,14 @@ function editCategory(id = {}, params = {}) {
                 dispatch(editCategorySuccess(resp.data));
             })
             .catch((err) => {
-                console.error('[ERROR] edit category: ', err);
+                const message = err.response.data;
+                notification.error({
+                    message: 'Failed to edit category',
+                    description:
+                        message,
+                    duration: 2,
+                    style: { width: 350, marginLeft: 35, marginTop: 45 }
+                });
                 dispatch(editCategoryFailure());
             });
     };
@@ -137,10 +151,16 @@ function editCategory(id = {}, params = {}) {
 }
 
 // deleteCategory
-function deleteCategory(id = {}) {
+function deleteCategory(id = {}, params = {}) {
+    console.log({ params });
     return (dispatch) => {
+
+
         axios.delete(api.deleteCategory + `/${id}`, {})
             .then(resp => {
+                if (params.total > 1 && (params.total - 1) % params.pageSize == 0) {
+                    dispatch(fetchDataCategory({ page: params.current - 1, limit: 10 }));
+                }
                 notification.success({
                     message: 'Success',
                     description:
@@ -148,7 +168,8 @@ function deleteCategory(id = {}) {
                     duration: 2,
                     style: { width: 350, marginLeft: 35, marginTop: 45 }
                 });
-                dispatch(deleteCategorySuccess(id));
+
+                dispatch(deleteCategorySuccess({ id }));
             })
             .catch((err) => {
                 console.error(err);
@@ -162,10 +183,10 @@ function deleteCategory(id = {}) {
                 dispatch(deleteCategoryFailure());
             });
     };
-    function deleteCategorySuccess(data) {
+    function deleteCategorySuccess(payload) {
         return {
             type: DELETE_CATEGORY_SUCCESS,
-            data
+            payload
         };
     }
 
@@ -175,3 +196,42 @@ function deleteCategory(id = {}) {
         };
     }
 }
+
+// getDataCategory
+function fetchDataCategory(params = { page: 1, limit: 10 }) {
+    return (dispatch) => {
+        dispatch(fetchingData());
+        axios.get(api.getDataCategory, {
+            params: { ...params }
+        })
+            .then(resp => {
+
+                dispatch(getDataSuccess(resp.data, params.pageCurrent || 1));
+            })
+            .catch((err) => {
+                dispatch(getDataFailure());
+            });
+    };
+
+    function fetchingData() {
+        return {
+            type: FETCHING_CATEGORY
+        };
+    }
+
+    function getDataSuccess(data, pageCurrent) {
+
+        return {
+            type: FETCH_CATEGORY_SUCCESS,
+            data,
+            pageCurrent
+        };
+    }
+
+    function getDataFailure() {
+        return {
+            type: FETCH_CATEGORY_FAILURE
+        };
+    }
+}
+

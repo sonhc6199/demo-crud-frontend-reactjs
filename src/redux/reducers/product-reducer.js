@@ -29,7 +29,7 @@ const product = (state = initialState, action) => {
         case FETCH_PRODUCT_SUCCESS: {
             const { page, totalItems, perPage } = action.data;
             const pagination = { ...state.paginationProduct, current: page, pageSize: perPage, total: totalItems };
-            
+
             return {
                 ...state,
                 data: action.data.productList || [],
@@ -48,7 +48,9 @@ const product = (state = initialState, action) => {
             const dataAdd = action.data.newProduct;
 
             let newData = [...state.data];
+            const { paginationProduct } = state;
 
+            const pagination = { ...state.paginationProduct, total: paginationProduct.total + 1 };
             newData.unshift(dataAdd);
 
             if (newData.length > 10) {
@@ -56,7 +58,8 @@ const product = (state = initialState, action) => {
             }
             return {
                 ...state,
-                data: newData
+                data: newData,
+                paginationProduct: pagination
             };
         }
 
@@ -93,10 +96,13 @@ const product = (state = initialState, action) => {
 
             const data = [...state.data];
             let newData = data.filter(item => item._id !== action.data);
+            const { paginationProduct } = state;
 
+            const pagination = { ...state.paginationProduct, total: paginationProduct.total - 1 };
             return {
                 ...state,
-                data: newData
+                data: newData,
+                paginationProduct: pagination
             };
         }
 

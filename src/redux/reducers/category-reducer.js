@@ -1,3 +1,4 @@
+
 import {
     FETCH_CATEGORY_SUCCESS,
     FETCH_CATEGORY_FAILURE,
@@ -8,7 +9,6 @@ import {
     EDIT_CATEGORY_FAILURE,
     DELETE_CATEGORY_SUCCESS
 } from '../constants/actionTypes';
-
 const initialState = {
     loading: false,
     data: [],
@@ -29,13 +29,11 @@ const category = (state = initialState, action) => {
         case FETCH_CATEGORY_SUCCESS: {
             const { page, totalItems, perPage } = action.data;
             const pagination = { ...state.paginationCategory, current: page, pageSize: perPage, total: totalItems };
-            console.log({ pagination });
             return {
                 ...state,
                 data: action.data.categoryList || [],
                 loading: false,
                 paginationCategory: pagination
-
             };
         }
 
@@ -49,6 +47,9 @@ const category = (state = initialState, action) => {
 
             let newData = [...state.data];
 
+            const { paginationCategory } = state;
+            const pagination = { ...state.paginationCategory, total: paginationCategory.total + 1 };
+
             newData.unshift(dataAdd);
 
             if (newData.length > 10) {
@@ -56,7 +57,8 @@ const category = (state = initialState, action) => {
             }
             return {
                 ...state,
-                data: newData
+                data: newData,
+                paginationCategory: pagination
             };
         }
 
@@ -91,12 +93,16 @@ const category = (state = initialState, action) => {
 
         case DELETE_CATEGORY_SUCCESS: {
 
-            const data = [...state.data];
-            let newData = data.filter(item => item._id !== action.data);
 
+            const data = [...state.data];
+
+            let newData = data.filter(item => item._id !== action.payload.id);
+            const { paginationCategory } = state;
+            const pagination = { ...state.paginationCategory, total: paginationCategory.total - 1 };
             return {
                 ...state,
-                data: newData
+                data: newData,
+                paginationCategory: pagination
             };
         }
 
